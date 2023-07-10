@@ -1,7 +1,7 @@
 .DEFAULT_GOAL := help
 
-PEX := PROJECTNAME
-PROJ := PROJECTNAME
+PEX := gdocsync
+PROJ := gdocsync
 PROJ_ROOT := src/$(PROJ)
 
 define RENAME_PROJECT_PYSCRIPT
