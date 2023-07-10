@@ -8,7 +8,6 @@ pre-commit
 # docs
 sphinx
 rst.linker
-furo
 
 # packages
 pip-compile-multi

@@ -7,69 +7,116 @@
 #
 -r base.txt
 astroid==2.12.13
-    # via pylint
+    # via
+    #   -c requirements/local.txt
+    #   pylint
 attrs==22.1.0
-    # via pytest
+    # via
+    #   -c requirements/local.txt
+    #   pytest
 build==0.9.0
-    # via pytest-checkdocs
+    # via
+    #   -c requirements/local.txt
+    #   pytest-checkdocs
 coverage[toml]==6.5.0
-    # via pytest-cov
+    # via
+    #   -c requirements/local.txt
+    #   pytest-cov
 dill==0.3.6
-    # via pylint
+    # via
+    #   -c requirements/local.txt
+    #   pylint
 docutils==0.19
-    # via pytest-checkdocs
+    # via
+    #   -c requirements/local.txt
+    #   pytest-checkdocs
 exceptiongroup==1.0.4
-    # via pytest
+    # via
+    #   -c requirements/local.txt
+    #   pytest
 flake8==6.0.0
     # via
+    #   -c requirements/local.txt
     #   -r requirements/ci.in
     #   flake8-pyproject
 flake8-pyproject==1.2.2
-    # via -r requirements/ci.in
-importlib-metadata==5.1.0
-    # via pytest-checkdocs
+    # via
+    #   -c requirements/local.txt
+    #   -r requirements/ci.in
 iniconfig==1.1.1
-    # via pytest
+    # via
+    #   -c requirements/local.txt
+    #   pytest
 isort==5.10.1
-    # via pylint
+    # via
+    #   -c requirements/local.txt
+    #   pylint
 lazy-object-proxy==1.8.0
-    # via astroid
+    # via
+    #   -c requirements/local.txt
+    #   astroid
 mccabe==0.7.0
     # via
+    #   -c requirements/local.txt
     #   flake8
     #   pylint
 mypy==0.991
-    # via -r requirements/ci.in
+    # via
+    #   -c requirements/local.txt
+    #   -r requirements/ci.in
 mypy-extensions==0.4.3
-    # via mypy
+    # via
+    #   -c requirements/local.txt
+    #   mypy
 packaging==21.3
     # via
+    #   -c requirements/local.txt
     #   build
     #   pytest
 pep517==0.13.0
-    # via build
+    # via
+    #   -c requirements/local.txt
+    #   build
 platformdirs==2.5.4
-    # via pylint
+    # via
+    #   -c requirements/local.txt
+    #   pylint
 pluggy==1.0.0
-    # via pytest
+    # via
+    #   -c requirements/local.txt
+    #   pytest
 pycodestyle==2.10.0
-    # via flake8
+    # via
+    #   -c requirements/local.txt
+    #   flake8
 pyflakes==3.0.1
-    # via flake8
+    # via
+    #   -c requirements/local.txt
+    #   flake8
 pylint==2.15.8
-    # via -r requirements/ci.in
+    # via
+    #   -c requirements/local.txt
+    #   -r requirements/ci.in
 pyparsing==3.0.9
-    # via packaging
+    # via
+    #   -c requirements/local.txt
+    #   packaging
 pytest==7.2.0
     # via
+    #   -c requirements/local.txt
     #   -r requirements/ci.in
     #   pytest-cov
 pytest-checkdocs==2.9.0
-    # via -r requirements/ci.in
+    # via
+    #   -c requirements/local.txt
+    #   -r requirements/ci.in
 pytest-cov==4.0.0
-    # via -r requirements/ci.in
+    # via
+    #   -c requirements/local.txt
+    #   -r requirements/ci.in
 tomli==2.0.1
     # via
+    #   -c requirements/local.txt
     #   build
     #   coverage
     #   flake8-pyproject
@@ -77,17 +124,22 @@ tomli==2.0.1
     #   pylint
     #   pytest
 tomlkit==0.11.6
-    # via pylint
+    # via
+    #   -c requirements/local.txt
+    #   pylint
 types-requests==2.28.11.5
-    # via -r requirements/ci.in
+    # via
+    #   -c requirements/local.txt
+    #   -r requirements/ci.in
 types-urllib3==1.26.25.4
-    # via types-requests
+    # via
+    #   -c requirements/local.txt
+    #   types-requests
 typing-extensions==4.4.0
     # via
-    #   astroid
+    #   -c requirements/local.txt
     #   mypy
-    #   pylint
 wrapt==1.14.1
-    # via astroid
-zipp==3.11.0
-    # via importlib-metadata
+    # via
+    #   -c requirements/local.txt
+    #   astroid

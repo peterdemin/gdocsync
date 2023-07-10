@@ -90,6 +90,7 @@ sync: ## completely sync installed packages with dev dependencies
 .PHONY: lock
 lock: ## lock versions of third-party dependencies
 	pip-compile-multi \
+		--autoresolve \
 		--allow-unsafe \
 		--use-cache \
 		--no-upgrade
@@ -97,6 +98,7 @@ lock: ## lock versions of third-party dependencies
 .PHONY: upgrade
 upgrade: ## upgrade versions of third-party dependencies
 	pip-compile-multi \
+		--autoresolve \
 		--allow-unsafe \
 		--use-cache
 
