@@ -97,10 +97,6 @@ pylint==2.15.8
     # via
     #   -c requirements/local.txt
     #   -r requirements/ci.in
-pyparsing==3.0.9
-    # via
-    #   -c requirements/local.txt
-    #   packaging
 pytest==7.2.0
     # via
     #   -c requirements/local.txt
@@ -121,6 +117,7 @@ tomli==2.0.1
     #   coverage
     #   flake8-pyproject
     #   mypy
+    #   pep517
     #   pylint
     #   pytest
 tomlkit==0.11.6
