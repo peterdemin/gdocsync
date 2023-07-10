@@ -9,7 +9,7 @@ def sync_johnny_decimal_drive_files(base_dir: str):
     cache = ShelveCache(CACHE_FILE_NAME)
     pandoc_client = PandocClient()
     drive_client = DriveClient(GoogleAuth(cache).get_credentials())
-    for drive_file in cache.wrap_callable("files", drive_client.list_files):
+    for drive_file in drive_client.list_files():
         if not JohnnyDecimal.is_valid(drive_file.name):
             continue
         johnny = JohnnyDecimal.parse(drive_file.name)
@@ -21,7 +21,3 @@ def sync_johnny_decimal_drive_files(base_dir: str):
         with open(target_path, "wt", encoding="utf-8") as f_target:
             f_target.write(f'{johnny.name}\n{"=" * len(johnny.name)}\n\n')
             f_target.write(rst_content)
-
-
-if __name__ == "__main__":
-    sync_johnny_decimal_drive_files()
