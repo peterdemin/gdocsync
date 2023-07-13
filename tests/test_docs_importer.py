@@ -3,18 +3,34 @@ import os
 import tempfile
 from unittest import mock
 
+import pytest
+
 from gdocsync.docs_importer import DocsImporter
 from gdocsync.google_drive_client import DriveClient, DriveFile
 from gdocsync.html_cleaner import HTMLCleaner
 from gdocsync.pandoc_client import PandocClient
 
-from .constants import EXPECTED_RST, SOURCE_HTML_BUNDLE
+from .constants import (
+    IMAGE_ASSETS,
+    MARKUP_ASSETS,
+    MINUTES_ASSETS,
+)
 
 CATEGORY_DIR = "13_category"
 
 
-def test_import_sample_html_bundle():
-    drive_client = load_drive_client(SOURCE_HTML_BUNDLE)
+@pytest.mark.parametrize(
+    "test_dir",
+    [
+        IMAGE_ASSETS,
+        MARKUP_ASSETS,
+        MINUTES_ASSETS,
+    ],
+)
+def test_import_sample_html_bundle(test_dir: str):
+    source_path = os.path.join(test_dir, "html_bundle.zip")
+    expected_path = os.path.join(test_dir, "imported.rst")
+    drive_client = load_drive_client(source_path)
     pandoc_client = PandocClient()
     logger = mock.Mock(spec_set=logging.Logger)
     docs_importer = DocsImporter(
@@ -30,7 +46,9 @@ def test_import_sample_html_bundle():
         assert os.path.exists(result_file)
         with open(result_file, "rt", encoding="utf-8") as fobj:
             result = fobj.read()
-        with open(EXPECTED_RST, "rt", encoding="utf-8") as fobj:
+        # with open(expected_path, "wt", encoding="utf-8") as fobj:
+        #     fobj.write(result)
+        with open(expected_path, "rt", encoding="utf-8") as fobj:
             expected = fobj.read()
         assert result == expected
 
