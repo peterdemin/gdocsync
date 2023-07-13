@@ -18,6 +18,13 @@ line_length = 100
 max-line-length = 100
 max-complexity = 10
 
+[tool.mypy]
+packages = ["gdocsync"]
+
+[[tool.mypy.overrides]]
+module = "google_auth_oauthlib.flow"
+ignore_missing_imports = true
+
 [tool.pylint.main]
 # Analyse import fallback blocks. This can be used to support both Python 2 and 3
 # compatible code, which means that the block might have code that exists only in

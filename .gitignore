@@ -4,4 +4,5 @@ Session.vim
 __pycache__/
 /build/
 /dist/
-.coverage
+/.coverage
+/.mypy_cache/

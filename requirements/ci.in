@@ -10,3 +10,6 @@ Flake8-pyproject
 mypy
 pylint
 types-requests
+lxml-stubs
+google-api-python-client-stubs
+google-auth-stubs

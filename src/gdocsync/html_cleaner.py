@@ -1,7 +1,8 @@
-from typing import Iterable
+from typing import Iterable, cast, List
 from urllib.parse import parse_qs, urlparse
 
 from lxml import etree
+from lxml.etree import _Element as ElementType
 
 
 class HTMLCleaner:
@@ -12,25 +13,25 @@ class HTMLCleaner:
     ]
 
     def __call__(self, html_contents: str) -> str:
-        htmlparser = etree.HTMLParser()
-        tree = etree.fromstring(html_contents, htmlparser)
+        tree = etree.fromstring(html_contents, cast(etree.XMLParser, etree.HTMLParser()))
         etree.strip_elements(tree, "style")
         self._fix_spans(tree)
         self._fix_links(tree)
         return etree.tostring(tree, pretty_print=True).decode("utf-8")
 
-    def _fix_spans(self, tree: etree.ElementTree) -> None:
+    def _fix_spans(self, tree: ElementType) -> None:
         for bold_span in self._iter_bold_spans(tree):
             bold_span.tag = "b"
-            bold_span.text = bold_span.text.strip()
+            if bold_span.text:
+                bold_span.text = bold_span.text.strip()
         etree.strip_tags(tree, "span")
 
-    def _iter_bold_spans(self, tree: etree.ElementTree) -> Iterable[etree.Element]:
+    def _iter_bold_spans(self, tree: ElementType) -> Iterable[ElementType]:
         for selector in self.BOLD_SELECTORS:
-            yield from tree.xpath(selector)
+            yield from cast(List[ElementType], tree.xpath(selector))
 
-    def _fix_links(self, tree: etree.ElementTree) -> None:
-        for link in tree.xpath("//a"):
+    def _fix_links(self, tree: ElementType) -> None:
+        for link in cast(List[ElementType], tree.xpath("//a")):
             url = link.get("href")
             if not url or not url.startswith(self.GOOGLE_TRACKING):
                 continue
