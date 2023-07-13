@@ -1,10 +1,10 @@
 import os
-import tempfile
 import subprocess
+import tempfile
 
 
 class PandocClient:
-    def convert_to_rst(self, source_bytes: bytes, target_path: str, extension: str = 'odt') -> str:
+    def convert_to_rst(self, source_bytes: bytes, target_path: str, extension: str = "odt") -> str:
         target_dir = os.path.dirname(target_path)
         with tempfile.TemporaryDirectory() as temp_dir:
             source_name = os.path.join(temp_dir, f"source.{extension}")

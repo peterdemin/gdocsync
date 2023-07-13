@@ -8,10 +8,10 @@ import zipfile
 
 from .constants import CACHE_FILE_NAME
 from .google_drive_client import DriveClient, DriveFile, GoogleAuth
+from .html_cleaner import HTMLCleaner
 from .johnny_decimal import JohnnyDecimal
 from .pandoc_client import PandocClient
 from .shelve_cache import ShelveCache
-from .html_cleaner import HTMLCleaner
 
 
 class DocsImporter:
