@@ -21,7 +21,6 @@ SCOPES = [
 class DriveFile:
     drive_id: str
     name: str
-    md5: str = ""
 
 
 class GoogleAuth:
@@ -65,7 +64,23 @@ class DriveClient:
             .get("files", [])
         ]
 
-    def download_doc(self, drive_file_id: str, mime_type="application/rtf") -> bytes:
+    def download_doc(self, drive_file_id: str, mime_type: str) -> bytes:
+        """Downloads the doc given drive file ID as bytes.
+
+        Supported mime types:
+
+        - Microsoft Word
+          application/vnd.openxmlformats-officedocument.wordprocessingml.document .docx
+        - OpenDocument application/vnd.oasis.opendocument.text .odt
+        - Rich Text application/rtf .rtf
+        - PDF application/pdf .pdf
+        - Plain Text text/plain .txt
+        - Web Page (HTML) application/zip .zip
+        - EPUB application/epub+zip .epub
+
+        Reference:
+        https://developers.google.com/drive/api/guides/ref-export-formats
+        """
         return (
             self._service.files()  # pylint: disable=no-member
             .export(fileId=drive_file_id, mimeType=mime_type)

@@ -30,15 +30,18 @@ class JohnnyDecimal:
     def fit_path(self, base_dir: str) -> str:
         parent_dir_expr = os.path.join(base_dir, f"{self.category}*")
         parent_dir_candidates = glob.glob(parent_dir_expr)
-        filename = f"{self.index}{self.SLUG_DELIMITER}{self.slug}"
         if len(parent_dir_candidates) == 1:
             parent_dir = parent_dir_candidates[0]
-            return os.path.join(parent_dir, filename)
-        full_pattern = os.path.join(parent_dir_expr, filename)
+            return os.path.join(parent_dir, self.file_name)
+        full_pattern = os.path.join(parent_dir_expr, self.file_name)
         raise ValueError(
             f"Could not find unambiguous fit for {full_pattern}. "
             f"Candidates: {parent_dir_candidates}"
         )
+
+    @property
+    def file_name(self) -> str:
+        return f"{self.index}{self.SLUG_DELIMITER}{self.slug}"
 
     @property
     def slug(self) -> str:

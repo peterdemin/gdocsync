@@ -1,13 +1,14 @@
 import click
 
-from .sync import sync_johnny_decimal_drive_files
+from .docs_importer import build_docs_importer
 
 
 @click.command()
 @click.argument('base_dir')
 def cli(base_dir):
-    """Simple program that greets NAME for a total of COUNT times."""
-    sync_johnny_decimal_drive_files(base_dir)
+    """Imports Google Docs documents to ReST files."""
+    docs_importer = build_docs_importer()
+    docs_importer(base_dir)
 
 
 if __name__ == '__main__':
