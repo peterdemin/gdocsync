@@ -3,6 +3,7 @@
 PEX := gdocsync
 PROJ := gdocsync
 PROJ_ROOT := src/$(PROJ)
+TESTS := tests
 
 define RENAME_PROJECT_PYSCRIPT
 import os
@@ -76,7 +77,7 @@ lint: ## check style with pylint
 
 .PHONY: test
 test: ## run test suite
-	pytest --cov=$(PROJ) $(PROJ_ROOT)
+	pytest --cov=$(PROJ) $(TESTS)
 
 .PHONY: install
 install: ## install the package with dev dependencies
