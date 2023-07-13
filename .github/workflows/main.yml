@@ -64,10 +64,10 @@ jobs:
           python-version: ${{ matrix.python }}${{ matrix.dev }}
       - name: Install dependencies
         run: |
-          python -m pip install -r requirements/local.txt
+          make install
       - name: Run tests
         run:
-          pytest --cov=gdocsync src/gdocsync
+          make test
 
   check:  # This job does nothing and is only used for the branch protection
     if: always()
