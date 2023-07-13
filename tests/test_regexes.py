@@ -1,4 +1,4 @@
-from .regexes import RE_JOHNNY_DECIMAL, RE_PUNCT
+from gdocsync.regexes import RE_JOHNNY_DECIMAL, RE_PUNCT
 
 
 def test_johnny_decimal_regex():
