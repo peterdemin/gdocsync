@@ -63,7 +63,7 @@ jobs:
         with:
           python-version: ${{ matrix.python }}${{ matrix.dev }}
       - name: Install Ubuntu packages
-        run: apt install pandoc
+        run: sudo apt-get install -y pandoc
       - name: Install dependencies
         run: make install
       - name: Run tests
