@@ -28,4 +28,6 @@ source directory:
 
 gdocsync source
 
-.. image:: images/image1.png
+|image1|
+
+.. |image1| image:: images/image1.png
