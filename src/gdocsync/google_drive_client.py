@@ -93,3 +93,10 @@ class DriveClient:
             .export(fileId=drive_file_id, mimeType=mime_type)
             .execute()
         )
+
+    def download_pdf(self, drive_file_id: str) -> bytes:
+        return (
+            self._service.files()  # pylint: disable=no-member
+            .export(fileId=drive_file_id, mimeType="application/pdf")
+            .execute()
+        )

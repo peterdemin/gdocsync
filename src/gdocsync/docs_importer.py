@@ -15,6 +15,8 @@ from .shelve_cache import ShelveCache
 
 
 class DocsImporter:
+    PDF_EXPORT_DIR = "_static"
+
     def __init__(
         self,
         pandoc_client: PandocClient,
@@ -31,6 +33,17 @@ class DocsImporter:
         for drive_file in self._drive_client.list_files():
             if JohnnyDecimal.is_valid(drive_file.name):
                 self._import_drive_file(drive_file, base_dir)
+            else:
+                self._maybe_update_pdf(drive_file, base_dir)
+
+    def _maybe_update_pdf(self, drive_file: DriveFile, base_dir: str) -> None:
+        target_path = os.path.join(
+            base_dir, self.PDF_EXPORT_DIR, os.path.splitext(drive_file.name)[0] + ".pdf"
+        )
+        if os.path.exists(target_path):
+            self._logger.info(f"Syncing {drive_file.name} to {target_path}")
+            with open(target_path, "wb") as fobj:
+                fobj.write(self._drive_client.download_pdf(drive_file.drive_id))
 
     def _import_drive_file(self, drive_file: DriveFile, base_dir: str) -> None:
         johnny = JohnnyDecimal.parse(drive_file.name)
