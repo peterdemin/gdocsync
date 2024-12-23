@@ -22,6 +22,7 @@ SCOPES = [
 class DriveFile:
     drive_id: str
     name: str
+    modified_time: str
 
 
 class GoogleAuth:
@@ -64,9 +65,13 @@ class DriveClient:
     def list_files(self) -> List[DriveFile]:
         """Iterates names and ids of the first 100 files the user has access to."""
         return [
-            DriveFile(drive_id=item["id"], name=item["name"])
+            DriveFile(drive_id=item["id"], name=item["name"], modified_time=item["modifiedTime"])
             for item in self._service.files()  # pylint: disable=no-member
-            .list(pageSize=100, fields="nextPageToken, files(id, name)")
+            .list(
+                pageSize=100,
+                fields="nextPageToken, files(id, name, modifiedTime)",
+                orderBy="modifiedTime desc",
+            )
             .execute()
             .get("files", [])
         ]

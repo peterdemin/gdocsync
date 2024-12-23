@@ -61,7 +61,7 @@ class DocsImporter:
             self._clean_html(source_html_path)
             temp_output = os.path.join(temp_dir, f"{johnny.file_name}.rst")
             self._pandoc_client.html_to_rst(source_html_path, temp_output)
-            self._prepend_page_title(temp_output, johnny.name)
+            self._add_preamble(temp_output, johnny.name, drive_file.modified_time)
             self._copy_result_to_destination(source_html_path, os.path.dirname(target_path))
 
     def _clean_html(self, file_path: str) -> None:
@@ -76,11 +76,12 @@ class DocsImporter:
         source_dir = os.path.dirname(source_html_path)
         shutil.copytree(source_dir, target_dir, dirs_exist_ok=True)
 
-    def _prepend_page_title(self, file_path: str, title: str) -> None:
+    def _add_preamble(self, file_path: str, title: str, modified_time: str) -> None:
         with open(file_path, "rt", encoding="utf-8") as fobj:
             content = fobj.read()
         with open(file_path, "wt", encoding="utf-8") as fobj:
             fobj.write(f'{title}\n{"=" * len(title)}\n\n')
+            fobj.write(f".. modified_time: {modified_time}\n\n")
             fobj.write(content)
 
     def _extract_zip_from_bytes(self, content: bytes, target_dir: str) -> None:

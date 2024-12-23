@@ -52,7 +52,9 @@ def test_import_sample_html_bundle(test_dir: str):
 
 def load_drive_client(html_bundle_path: str) -> mock.Mock:
     drive_client = mock.Mock(spec_set=DriveClient)
-    drive_client.list_files.return_value = [DriveFile(drive_id="drive_id", name="[13.68] - Name")]
+    drive_client.list_files.return_value = [
+        DriveFile(drive_id="drive_id", name="[13.68] - Name", modified_time="42")
+    ]
     with open(html_bundle_path, "rb") as fobj:
         drive_client.download_doc.return_value = fobj.read()
     return drive_client
