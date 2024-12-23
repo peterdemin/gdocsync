@@ -17,7 +17,7 @@ class JohnnyDecimal:
     def parse(cls, name: str) -> "JohnnyDecimal":
         match_obj = RE_JOHNNY_DECIMAL.match(name)
         if match_obj is None:
-            raise ValueError(f'{name} does not follow Johnny Decimal notation.')
+            raise ValueError(f"{name} does not follow Johnny Decimal notation.")
         groups = match_obj.groups()
         return cls(
             category=groups[0],

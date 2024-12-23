@@ -10,11 +10,7 @@ from gdocsync.google_drive_client import DriveClient, DriveFile
 from gdocsync.html_cleaner import HTMLCleaner
 from gdocsync.pandoc_client import PandocClient
 
-from .constants import (
-    IMAGE_ASSETS,
-    MARKUP_ASSETS,
-    MINUTES_ASSETS,
-)
+from .constants import IMAGE_ASSETS, LINKS_ASSETS, MARKUP_ASSETS, MINUTES_ASSETS
 
 CATEGORY_DIR = "13_category"
 
@@ -24,6 +20,7 @@ CATEGORY_DIR = "13_category"
     [
         IMAGE_ASSETS,
         MARKUP_ASSETS,
+        LINKS_ASSETS,
         MINUTES_ASSETS,
     ],
 )

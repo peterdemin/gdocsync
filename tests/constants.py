@@ -14,6 +14,11 @@ MARKUP_SOURCE_HTML = os.path.join(MARKUP_ASSETS, "page.html")
 MARKUP_CLEAN_HTML = os.path.join(MARKUP_ASSETS, "page_clean.html")
 MARKUP_CONVERTED_RST = os.path.join(MARKUP_ASSETS, "converted.rst")
 
+LINKS_ASSETS = os.path.join(_HERE, "assets/links")
+LINKS_SOURCE_HTML = os.path.join(LINKS_ASSETS, "page.html")
+LINKS_CLEAN_HTML = os.path.join(LINKS_ASSETS, "page_clean.html")
+LINKS_CONVERTED_RST = os.path.join(LINKS_ASSETS, "converted.rst")
+
 ALT_MARKUP_ASSETS = os.path.join(_HERE, "assets/alt_markup")
 ALT_MARKUP_SOURCE_HTML = os.path.join(ALT_MARKUP_ASSETS, "page.html")
 ALT_MARKUP_CLEAN_HTML = os.path.join(ALT_MARKUP_ASSETS, "page_clean.html")
