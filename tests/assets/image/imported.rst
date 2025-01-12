@@ -35,4 +35,4 @@ gdocsync source
 
 |image1|
 
-.. |image1| image:: images/image1.png
+.. |image1| image:: images/12.34-1.png

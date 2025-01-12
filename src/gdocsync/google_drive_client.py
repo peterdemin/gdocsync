@@ -1,7 +1,7 @@
 import json
 import os.path
 from dataclasses import dataclass
-from typing import List
+from typing import List, cast
 
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
@@ -23,6 +23,7 @@ class DriveFile:
     drive_id: str
     name: str
     modified_time: str
+    mime_type: str
 
 
 class GoogleAuth:
@@ -65,16 +66,30 @@ class DriveClient:
     def list_files(self) -> List[DriveFile]:
         """Iterates names and ids of the first 100 files the user has access to."""
         return [
-            DriveFile(drive_id=item["id"], name=item["name"], modified_time=item["modifiedTime"])
-            for item in self._service.files()  # pylint: disable=no-member
+            DriveFile(
+                drive_id=item["id"],
+                name=item["name"],
+                modified_time=item["modifiedTime"],
+                mime_type=item["mimeType"],
+            )
+            for item in self._list_file_fields()
+        ]
+
+    def _list_file_fields(self) -> List[dict]:
+        """Iterates names and ids of the first 100 files the user has access to."""
+        return cast(  # Google library claims return type as list of File objects, but it's not
+            List[dict],
+            self._service.files()  # pylint: disable=no-member
             .list(
                 pageSize=100,
-                fields="nextPageToken, files(id, name, modifiedTime)",
+                fields="nextPageToken, files(id, name, modifiedTime, mimeType)",
                 orderBy="modifiedTime desc",
+                includeItemsFromAllDrives=True,
+                supportsAllDrives=True,
             )
             .execute()
-            .get("files", [])
-        ]
+            .get("files", []),
+        )
 
     def download_doc(self, drive_file_id: str, mime_type: str) -> bytes:
         """Downloads the doc given drive file ID as bytes.

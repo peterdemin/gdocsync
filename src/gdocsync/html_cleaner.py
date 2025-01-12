@@ -1,3 +1,4 @@
+import os
 from typing import Iterable, List, cast
 from urllib.parse import parse_qs, urlparse
 
@@ -17,13 +18,20 @@ class HTMLCleaner:
         "\u2006\u2007\u2008\u2009\u200A\u200B\u202F\u205F\u3000"
     )
 
-    def __call__(self, html_contents: str) -> str:
+    def __call__(self, file_path: str, prefix: str) -> None:
+        with open(file_path, "rt", encoding="utf-8") as fobj:
+            html_contents = fobj.read()
         tree = etree.fromstring(html_contents, cast(etree.XMLParser, etree.HTMLParser()))
         etree.strip_elements(tree, "style")
         self._fix_spans(tree)
         self._fix_links(tree)
         self._fix_headings(tree)
-        return etree.tostring(tree, pretty_print=True).decode("utf-8")
+        self._rename_images(tree, os.path.dirname(file_path), prefix)
+        html_contents = self._postprocess_html(
+            etree.tostring(tree, pretty_print=True).decode("utf-8")
+        )
+        with open(file_path, "wt", encoding="utf-8") as fobj:
+            fobj.write(html_contents)
 
     def _fix_spans(self, tree: ElementType) -> None:
         for bold_span in self._iter_bold_spans(tree):
@@ -45,16 +53,33 @@ class HTMLCleaner:
 
     def _fix_links(self, tree: ElementType) -> None:
         for link in cast(List[ElementType], tree.xpath("//a")):
-            if not link.text.strip(self.WHITESPACES):
+            if not (link.text or "").strip(self.WHITESPACES):
                 # Remove links with whitespace texts.
                 # Google docs likes to insert them before actual links sometimes.
+                parent = link.getparent()
                 if prev := link.getprevious():
-                    prev.tail += " "
-                else:
-                    link.getparent().text += " "
-                link.getparent().remove(link)
+                    prev.tail = (prev.tail or "") + " "
+                elif parent:
+                    parent.text = (link.getparent().text or "") + " "
+                if parent:
+                    parent.remove(link)
                 continue
             url = link.get("href")
             if url and url.startswith(self.GOOGLE_TRACKING):
                 if real_url := parse_qs(urlparse(url).query).get("q", [""])[0]:
                     link.set("href", real_url)
+
+    def _postprocess_html(self, html: str) -> str:
+        return html.replace("<br/></b>", "</b><br/>")
+
+    def _rename_images(self, tree: ElementType, dir_path: str, prefix: str) -> None:
+        for idx, img in enumerate(cast(List[ElementType], tree.xpath("//img")), 1):
+            image_rel_path = img.attrib["src"]
+            image_rel_dir = os.path.dirname(image_rel_path)
+            _, ext = os.path.splitext(image_rel_path)
+            target_rel_path = f"{image_rel_dir}/{prefix}-{idx}{ext}"
+            img.attrib["src"] = target_rel_path
+            os.rename(
+                os.path.join(dir_path, image_rel_path),
+                os.path.join(dir_path, target_rel_path),
+            )

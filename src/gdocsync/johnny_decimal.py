@@ -48,3 +48,7 @@ class JohnnyDecimal:
     @property
     def slug(self) -> str:
         return RE_PUNCT.sub(self.SLUG_DELIMITER, self.name).lower()
+
+    @property
+    def full_index(self) -> str:
+        return f"{self.category}.{self.index}"

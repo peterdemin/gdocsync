@@ -8,6 +8,8 @@ def test_johnny_decimal_regex():
     assert positive.groups() == ("12", "34", "Name")
     negative = RE_JOHNNY_DECIMAL.match("07/20 - Birthday")
     assert negative is None
+    negative = RE_JOHNNY_DECIMAL.match("12345 is a number")
+    assert negative is None
 
 
 def test_punctuation_regex():

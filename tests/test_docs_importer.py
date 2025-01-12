@@ -12,7 +12,7 @@ from gdocsync.pandoc_client import PandocClient
 
 from .constants import IMAGE_ASSETS, LINKS_ASSETS, MARKUP_ASSETS, MINUTES_ASSETS
 
-CATEGORY_DIR = "13_category"
+CATEGORY_DIR = "12_category"
 
 
 @pytest.mark.parametrize(
@@ -39,7 +39,7 @@ def test_import_sample_html_bundle(test_dir: str):
     with tempfile.TemporaryDirectory() as temp_dir:
         os.mkdir(os.path.join(temp_dir, CATEGORY_DIR))
         docs_importer(temp_dir)
-        result_file = os.path.join(temp_dir, CATEGORY_DIR, "68-name.rst")
+        result_file = os.path.join(temp_dir, CATEGORY_DIR, "34-name.rst")
         assert os.path.exists(result_file)
         with open(result_file, "rt", encoding="utf-8") as fobj:
             result = fobj.read()
@@ -53,7 +53,12 @@ def test_import_sample_html_bundle(test_dir: str):
 def load_drive_client(html_bundle_path: str) -> mock.Mock:
     drive_client = mock.Mock(spec_set=DriveClient)
     drive_client.list_files.return_value = [
-        DriveFile(drive_id="drive_id", name="[13.68] - Name", modified_time="42")
+        DriveFile(
+            drive_id="drive_id",
+            name="[12.34] - Name",
+            modified_time="42",
+            mime_type="text/html",
+        )
     ]
     with open(html_bundle_path, "rb") as fobj:
         drive_client.download_doc.return_value = fobj.read()

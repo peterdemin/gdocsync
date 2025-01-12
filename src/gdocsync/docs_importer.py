@@ -58,18 +58,14 @@ class DocsImporter:
                 temp_dir,
             )
             source_html_path = glob.glob(os.path.join(temp_dir, "*.html"))[0]
-            self._clean_html(source_html_path)
+            self._clean_html(source_html_path, johnny.full_index)
             temp_output = os.path.join(temp_dir, f"{johnny.file_name}.rst")
             self._pandoc_client.html_to_rst(source_html_path, temp_output)
             self._add_preamble(temp_output, johnny.name, drive_file.modified_time)
             self._copy_result_to_destination(source_html_path, os.path.dirname(target_path))
 
-    def _clean_html(self, file_path: str) -> None:
-        with open(file_path, "rt", encoding="utf-8") as fobj:
-            content = fobj.read()
-        content = self._html_cleaner(content)
-        with open(file_path, "wt", encoding="utf-8") as fobj:
-            fobj.write(content)
+    def _clean_html(self, file_path: str, prefix: str) -> None:
+        self._html_cleaner(file_path, prefix)
 
     def _copy_result_to_destination(self, source_html_path: str, target_dir: str) -> None:
         os.unlink(source_html_path)
@@ -80,7 +76,8 @@ class DocsImporter:
         with open(file_path, "rt", encoding="utf-8") as fobj:
             content = fobj.read()
         with open(file_path, "wt", encoding="utf-8") as fobj:
-            fobj.write(f'{title}\n{"=" * len(title)}\n\n')
+            if title not in content:
+                fobj.write(f'{title}\n{"=" * len(title)}\n\n')
             fobj.write(f".. modified_time: {modified_time}\n\n")
             fobj.write(content)
 
