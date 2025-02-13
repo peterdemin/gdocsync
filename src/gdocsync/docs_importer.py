@@ -48,6 +48,9 @@ class DocsImporter:
     def _import_drive_file(self, drive_file: DriveFile, base_dir: str) -> None:
         johnny = JohnnyDecimal.parse(drive_file.name)
         target_path = johnny.fit_path(base_dir) + ".rst"
+        if not self._is_modified(target_path, drive_file):
+            self._logger.info(f"{drive_file.name} already in sync with {target_path}")
+            return
         self._logger.info(f"Syncing {drive_file.name} to {target_path}")
         with tempfile.TemporaryDirectory() as temp_dir:
             self._extract_zip_from_bytes(
@@ -76,10 +79,18 @@ class DocsImporter:
         with open(file_path, "rt", encoding="utf-8") as fobj:
             content = fobj.read()
         with open(file_path, "wt", encoding="utf-8") as fobj:
-            if title not in content:
+            if title.lower() not in content.lower():
                 fobj.write(f'{title}\n{"=" * len(title)}\n\n')
-            fobj.write(f".. modified_time: {modified_time}\n\n")
-            fobj.write(content)
+            fobj.write(self._format_modified_time(modified_time) + "\n" + content)
+
+    def _is_modified(self, target_path: str, drive_file: DriveFile) -> bool:
+        if not os.path.exists(target_path):
+            return True
+        with open(target_path, "rt", encoding="utf-8") as fobj:
+            return self._format_modified_time(drive_file.modified_time) not in fobj
+
+    def _format_modified_time(self, modified_time: str) -> str:
+        return f".. modified_time: {modified_time}\n"
 
     def _extract_zip_from_bytes(self, content: bytes, target_dir: str) -> None:
         with zipfile.ZipFile(io.BytesIO(content)) as zip_file:
