@@ -2,7 +2,7 @@ import os
 from typing import Iterable, List, cast
 from urllib.parse import parse_qs, urlparse
 
-from lxml import etree
+import lxml.etree as etree  # pylint: disable=consider-using-from-import
 from lxml.etree import _Element as ElementType
 
 
@@ -73,12 +73,24 @@ class HTMLCleaner:
         return html.replace("<br/></b>", "</b><br/>")
 
     def _rename_images(self, tree: ElementType, dir_path: str, prefix: str) -> None:
+        """Renames image files to be globally unique and updates src attributes.
+
+        Uses CC.ID-COUNTER pattern to ensure that images from different docs do not clash.
+
+        Allows same image used many times in the doc.
+        """
+        moves: dict[str, str] = {}
         for idx, img in enumerate(cast(List[ElementType], tree.xpath("//img")), 1):
             image_rel_path = img.attrib["src"]
-            image_rel_dir = os.path.dirname(image_rel_path)
-            _, ext = os.path.splitext(image_rel_path)
-            target_rel_path = f"{image_rel_dir}/{prefix}-{idx}{ext}"
+            if image_rel_path in moves:
+                target_rel_path = moves[image_rel_path]
+            else:
+                image_rel_dir = os.path.dirname(image_rel_path)
+                _, ext = os.path.splitext(image_rel_path)
+                target_rel_path = f"{image_rel_dir}/{prefix}-{idx}{ext}"
+                moves[image_rel_path] = target_rel_path
             img.attrib["src"] = target_rel_path
+        for image_rel_path, target_rel_path in moves.items():
             os.rename(
                 os.path.join(dir_path, image_rel_path),
                 os.path.join(dir_path, target_rel_path),
