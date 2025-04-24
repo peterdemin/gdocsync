@@ -5,6 +5,7 @@ from typing import List, cast
 
 from google.auth.exceptions import RefreshError
 from google.auth.transport.requests import Request
+from google.oauth2 import service_account
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
@@ -24,6 +25,25 @@ class DriveFile:
     name: str
     modified_time: str
     mime_type: str
+
+
+class GoogleWorkspaceAuth:
+    _SERVICE_KEY = os.path.expanduser("~/.gcp/service-account.json")
+
+    @classmethod
+    def available(cls) -> bool:
+        return os.path.exists(cls._SERVICE_KEY)
+
+    @classmethod
+    def delegated(cls, email: str) -> Credentials:
+        return cast(
+            Credentials,
+            service_account.Credentials.from_service_account_file(
+                cls._SERVICE_KEY,
+                scopes=SCOPES,
+                subject=email,
+            ),
+        )
 
 
 class GoogleAuth:

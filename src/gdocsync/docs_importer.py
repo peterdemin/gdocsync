@@ -7,7 +7,7 @@ import tempfile
 import zipfile
 
 from .constants import CACHE_FILE_NAME
-from .google_drive_client import DriveClient, DriveFile, GoogleAuth
+from .google_drive_client import DriveClient, DriveFile, GoogleAuth, GoogleWorkspaceAuth
 from .html_cleaner import HTMLCleaner
 from .johnny_decimal import JohnnyDecimal
 from .pandoc_client import PandocClient
@@ -97,10 +97,15 @@ class DocsImporter:
             zip_file.extractall(target_dir)
 
 
-def build_docs_importer():
+def build_docs_importer(email: str = ""):
+    credentials = (
+        GoogleWorkspaceAuth.delegated(email)
+        if email and GoogleWorkspaceAuth.available()
+        else GoogleAuth(ShelveCache(CACHE_FILE_NAME)).get_credentials()
+    )
     return DocsImporter(
         pandoc_client=PandocClient(),
-        drive_client=DriveClient(GoogleAuth(ShelveCache(CACHE_FILE_NAME)).get_credentials()),
+        drive_client=DriveClient(credentials),
         logger=logging.getLogger(__name__),
         html_cleaner=HTMLCleaner(),
     )
