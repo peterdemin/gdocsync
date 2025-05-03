@@ -93,6 +93,7 @@ class DriveClient:
                 mime_type=item["mimeType"],
             )
             for item in self._list_file_fields()
+            if not item["trashed"]
         ]
 
     def _list_file_fields(self) -> List[dict]:
@@ -102,7 +103,7 @@ class DriveClient:
             self._service.files()  # pylint: disable=no-member
             .list(
                 pageSize=100,
-                fields="nextPageToken, files(id, name, modifiedTime, mimeType)",
+                fields="nextPageToken, files(id, name, modifiedTime, mimeType, trashed)",
                 orderBy="modifiedTime desc",
                 includeItemsFromAllDrives=True,
                 supportsAllDrives=True,
