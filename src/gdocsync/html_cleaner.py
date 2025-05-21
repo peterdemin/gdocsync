@@ -60,7 +60,7 @@ class HTMLCleaner:
                 if prev := link.getprevious():
                     prev.tail = (prev.tail or "") + " "
                 elif parent:
-                    parent.text = (link.getparent().text or "") + " "
+                    parent.text = (parent.text or "") + " "
                 if parent:
                     parent.remove(link)
                 continue
