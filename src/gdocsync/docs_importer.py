@@ -64,7 +64,7 @@ class DocsImporter:
             self._clean_html(source_html_path, johnny.full_index)
             temp_output = os.path.join(temp_dir, f"{johnny.file_name}.rst")
             self._pandoc_client.html_to_rst(source_html_path, temp_output)
-            self._add_preamble(temp_output, johnny.name, drive_file.modified_time)
+            self._add_preamble(temp_output, drive_file.modified_time)
             self._copy_result_to_destination(source_html_path, os.path.dirname(target_path))
 
     def _clean_html(self, file_path: str, prefix: str) -> None:
@@ -75,12 +75,10 @@ class DocsImporter:
         source_dir = os.path.dirname(source_html_path)
         shutil.copytree(source_dir, target_dir, dirs_exist_ok=True)
 
-    def _add_preamble(self, file_path: str, title: str, modified_time: str) -> None:
+    def _add_preamble(self, file_path: str, modified_time: str) -> None:
         with open(file_path, "rt", encoding="utf-8") as fobj:
             content = fobj.read()
         with open(file_path, "wt", encoding="utf-8") as fobj:
-            if title.lower() not in content.lower():
-                fobj.write(f'{title}\n{"=" * len(title)}\n\n')
             fobj.write(self._format_modified_time(modified_time) + "\n" + content)
 
     def _is_modified(self, target_path: str, drive_file: DriveFile) -> bool:

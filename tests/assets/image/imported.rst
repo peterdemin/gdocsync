@@ -1,6 +1,3 @@
-Name
-====
-
 .. modified_time: 42
 
 .. _h.ocfpud4jd4yz:

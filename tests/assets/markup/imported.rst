@@ -1,6 +1,3 @@
-Name
-====
-
 .. modified_time: 42
 
 .. _h.z50vezvsol1i:

@@ -1,6 +1,3 @@
-Name
-====
-
 .. modified_time: 42
 
 Weekly Meeting Notes
